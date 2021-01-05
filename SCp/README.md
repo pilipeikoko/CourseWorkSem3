@@ -5,7 +5,7 @@
 
 Для начала, необходимо поставить остис версии SCp-stable(на момент написания работает только на данной ветке). 
 Скачать его можно [тут](https://github.com/ostis-apps/ostis-example-app) или при помощи команды 
-<a> git clone https://github.com/ostis-apps/ostis-example-app.git -b scp_stable</a> 
+~~ git clone https://github.com/ostis-apps/ostis-example-app.git -b scp_stable~~
 
 Сам пример нужно скачать в папку kb, до этого удалив из этой папки ui_menu:
 
