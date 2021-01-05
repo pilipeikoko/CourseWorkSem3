@@ -1,0 +1,13 @@
+directed_graph->graph4(*
+	->rrel_vertex: A4;;
+	->rrel_vertex: B4;;
+	->rrel_vertex: C4;;
+	->rrel_vertex: D4;;
+	->rrel_vertex: E4;;
+	->rrel_edge: ( A4 => E4 )(*<= 2;;*);;
+	->rrel_edge: ( C4 => A4 )(*<= 10;;*);;
+	->rrel_edge: ( C4 => D4 )(*<= 5;;*);;
+	->rrel_edge: ( D4 => B4 )(*<= 4;;*);;
+	->rrel_edge: ( E4 => B4 )(*<= 3;;*);;
+	->rrel_edge: ( E4 => D4 )(*<= 6;;*);;
+*);;

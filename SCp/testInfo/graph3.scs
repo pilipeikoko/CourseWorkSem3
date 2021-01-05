@@ -1,0 +1,13 @@
+directed_graph->graph3(*
+	->rrel_vertex: A3;;
+	->rrel_vertex: B3;;
+	->rrel_vertex: C3;;
+	->rrel_vertex: D3;;
+	->rrel_vertex: E3;;
+	->rrel_edge: ( A3 => B3 )(*<= 6;;*);;
+	->rrel_edge: ( E3 => A3 )(*<= 5;;*);;
+	->rrel_edge: ( E3 => B3 )(*<= 8;;*);;
+	->rrel_edge: ( B3 => C3 )(*<= 10;;*);;
+	->rrel_edge: ( C3 => D3 )(*<= 7;;*);;
+	->rrel_edge: ( D3 => B3 )(*<= 7;;*);;
+*);;

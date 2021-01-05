@@ -1,0 +1,17 @@
+directed_graph->graph2(*
+	->rrel_vertex: A2;;
+	->rrel_vertex: B2;;
+	->rrel_vertex: C2;;
+	->rrel_vertex: D2;;
+	->rrel_vertex: E2;;
+	->rrel_vertex: F2;;
+	->rrel_edge: ( A2 => B2 )(*<= 8;;*);;
+	->rrel_edge: ( A2 => C2 )(*<= 7;;*);;
+	->rrel_edge: ( B2 => C2 )(*<= 4;;*);;
+	->rrel_edge: ( C2 => E2 )(*<= 5;;*);;
+	->rrel_edge: ( B2 => D2 )(*<= 4;;*);;
+	->rrel_edge: ( B2 => E2 )(*<= 6;;*);;
+	->rrel_edge: ( C2 => D2 )(*<= 3;;*);;
+	->rrel_edge: ( D2 => F2 )(*<= 7;;*);;
+	->rrel_edge: ( E2 => F2 )(*<= 9;;*);;
+*);;

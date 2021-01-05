@@ -1,0 +1,196 @@
+
+scp_program -> my_proc (*
+	
+	-> rrel_params: ... ;;
+
+	-> rrel_operators: ... (*
+
+	-> rrel_init: ..proc_run_all_tests_print_begin (*
+		<- printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [Начало программы];; 		
+		=> nrel_goto: ..proc_run_all_tests_run_test_1;;	
+	*);;
+
+
+	// Running first test
+	-> ..proc_run_all_tests_run_test_1 (*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_find_radius;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_const: graph1;;
+
+			-> rrel_2: rrel_fixed: rrel_scp_const: [1];;
+
+			-> rrel_3: rrel_assign:rrel_scp_var: radius;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: test1;;
+		=> nrel_goto: ..proc_run_all_tests_wait_test_1;;
+	*);;	
+	
+	-> ..proc_run_all_tests_wait_test_1 (*
+		<- waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: test1;;
+		=> nrel_goto: ..print_text_radius_1;;
+	*);;
+
+	->..print_text_radius_1(*
+		<-print;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [radius: ];;
+		=> nrel_goto: ..print_radius_value_1;;
+	*);;
+
+	->..print_radius_value_1(*
+		<-printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: radius;;
+		=> nrel_goto: ..proc_run_all_tests_run_test_2;;
+	*);;
+
+
+		// Running second test
+	-> ..proc_run_all_tests_run_test_2 (*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_find_radius;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_const: graph2;;
+
+			-> rrel_2: rrel_fixed: rrel_scp_const: [2];;
+
+			->rrel_3: rrel_assign:rrel_scp_var: radius;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: test2;;
+		=> nrel_goto: ..proc_run_all_tests_wait_test_2;;
+	*);;	
+	
+	-> ..proc_run_all_tests_wait_test_2 (*
+		<- waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: test2;;
+		=> nrel_goto: ..print_text_radius_2;;
+	*);;
+
+
+	->..print_text_radius_2(*
+		<-print;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [radius: ];;
+		=> nrel_goto: ..print_radius_value_2;;
+	*);;
+
+	->..print_radius_value_2(*
+		<-printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: radius;;
+		=> nrel_goto: ..proc_run_all_tests_run_test_3;;
+	*);;
+
+
+
+	// Running third test
+	-> ..proc_run_all_tests_run_test_3 (*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_find_radius;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_const: graph3;;
+
+			-> rrel_2: rrel_fixed: rrel_scp_const: [3];;
+
+			->rrel_3: rrel_assign:rrel_scp_var: radius;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: test3;;
+		=> nrel_goto: ..proc_run_all_tests_wait_test_3;;
+	*);;	
+	
+	-> ..proc_run_all_tests_wait_test_3 (*
+		<- waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: test3;;
+		=> nrel_goto: ..print_text_radius_3;;
+	*);;
+
+
+	->..print_text_radius_3(*
+		<-print;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [radius: ];;
+		=> nrel_goto: ..print_radius_value_3;;
+	*);;
+
+	->..print_radius_value_3(*
+		<-printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: radius;;
+		=> nrel_goto: ..proc_run_all_tests_run_test_4;;
+	*);;
+
+
+	// Running fourth test
+	-> ..proc_run_all_tests_run_test_4 (*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_find_radius;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_const: graph4;;
+
+			-> rrel_2: rrel_fixed: rrel_scp_const: [4];;
+
+			->rrel_3: rrel_assign:rrel_scp_var: radius;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: test4;;
+		=> nrel_goto: ..proc_run_all_tests_wait_test_4;;
+	*);;	
+	
+	-> ..proc_run_all_tests_wait_test_4 (*
+		<- waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: test4;;
+		=> nrel_goto: ..print_text_radius_4;;
+	*);;
+
+
+	->..print_text_radius_4(*
+		<-print;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [radius: ];;
+		=> nrel_goto: ..print_radius_value_4;;
+	*);;
+
+	->..print_radius_value_4(*
+		<-printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: radius;;
+		=> nrel_goto: ..proc_run_all_tests_run_test_5;;
+	*);;
+
+
+	// Running fifth test
+	-> ..proc_run_all_tests_run_test_5 (*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_find_radius;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_const: graph5;;
+
+			-> rrel_2: rrel_fixed: rrel_scp_const: [5];;
+
+			->rrel_3: rrel_assign:rrel_scp_var: radius;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: test5;;
+		=> nrel_goto: ..proc_run_all_tests_wait_test_5;;
+	*);;	
+	
+	-> ..proc_run_all_tests_wait_test_5 (*
+		<- waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: test5;;
+		=> nrel_goto: ..print_text_radius_5;;
+	*);;
+
+
+	->..print_text_radius_5(*
+		<-print;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [radius: ];;
+		=> nrel_goto: ..print_radius_value_5;;
+	*);;
+
+	->..print_radius_value_5(*
+		<-printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: radius;;
+		=> nrel_goto: ..return;;
+	*);;
+
+	// Quitting program
+	-> ..return (*
+		<- return;;
+	*);;
+
+
+	*);;
+*);;

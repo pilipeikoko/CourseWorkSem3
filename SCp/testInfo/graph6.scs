@@ -1,0 +1,25 @@
+directed_graph->graph6(*
+	->rrel_vertex: A6;;
+	->rrel_vertex: B6;;
+	->rrel_vertex: C6;;
+	->rrel_vertex: D6;;
+	->rrel_vertex: E6;;
+	->rrel_vertex: F6;;
+	->rrel_vertex: G6;;
+	->rrel_vertex: H6;;
+	->rrel_vertex: I6;;
+	->rrel_vertex: J6;;
+	->rrel_edge: ( A6 => C6 )(*<= 11;;*);;
+	->rrel_edge: ( B6 => A6)(*<= 6;;*);;
+	->rrel_edge: ( D6 => B6 )(*<= 10;;*);;
+	->rrel_edge: ( C6 => I6 )(*<= 3;;*);;
+	->rrel_edge: ( J6 => I6 )(*<= 6;;*);;
+	->rrel_edge: ( B6 => J6 )(*<= 13;;*);;
+	->rrel_edge: ( D6 => F6 )(*<= 11;;*);;
+	->rrel_edge: ( H6 => D6 )(*<= 5;;*);;
+	->rrel_edge: ( H6 => F6)(*<= 13;;*);;
+	->rrel_edge: ( G6 => E6 )(*<= 7;;*);;
+	->rrel_edge: ( G6 => C6 )(*<= 10;;*);;
+	->rrel_edge: ( G6 => I6 )(*<= 15;;*);;
+	//radius 3
+*);;

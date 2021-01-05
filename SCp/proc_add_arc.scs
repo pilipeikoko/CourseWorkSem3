@@ -1,0 +1,118 @@
+
+//Adding or replacing arc
+scp_program -> proc_add_or_replace_arc (*
+	-> rrel_params: ... (*
+		-> rrel_1: rrel_in: source;;
+        -> rrel_2: rrel_in: target;;
+        -> rrel_3: rrel_in: weight;;
+	*);;
+
+	-> rrel_operators: ... (*
+
+        //Checking if arc between source and target exists
+		->rrel_init:..find_arc_from_source_to_target (*
+			<- searchElStr3;;
+			-> rrel_1: rrel_fixed: rrel_scp_var: source;;
+			-> rrel_2: rrel_assign: rrel_scp_var: _arc;;
+			-> rrel_3: rrel_fixed: rrel_scp_var: target;;
+		
+			=> nrel_then: ..get_weight_in_add_arc;;
+            => nrel_else: ..gen_weight_arc;;//arc not found
+		*);;
+		
+        //Gets weight of arc between source and target
+		->..get_weight_in_add_arc(*
+            <- call;;
+            -> rrel_1: rrel_fixed: rrel_scp_const: proc_find_weight_of_graph;;
+	        -> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+		        -> rrel_1: rrel_fixed: rrel_scp_var: source;;
+		        -> rrel_2: rrel_fixed: rrel_scp_var: target;;
+			    -> rrel_3: rrel_assign: rrel_scp_var: current_weight;;
+		    *);;
+		    -> rrel_3: rrel_assign: rrel_scp_var: _descr24;;
+		    => nrel_goto: ..wait_after_get_weight_in_add_arc;;
+        *);;
+
+        ->..wait_after_get_weight_in_add_arc(*
+            <-waitReturn;;
+            -> rrel_1: rrel_fixed: rrel_scp_var: _descr24;;
+            => nrel_goto: ..is_greater;;
+        *);;
+
+        //We should add arc with minimal weight
+        ->..is_greater(*
+            <- ifGr;;
+            -> rrel_1:rrel_fixed: rrel_scp_var: weight;;
+            -> rrel_2:rrel_fixed: rrel_scp_var: current_weight;;
+            => nrel_then: ..proc_add_arc_return;;
+            => nrel_else: ..remove_arc;;
+        *);;
+
+        ->..assign_current_weight(*
+            <-varAssign;;
+            -> rrel_1: rrel_assign: rrel_scp_var: current_weight;;
+            -> rrel_2: rrel_fixed: rrel_scp_var: weight;;
+            => nrel_goto: ..proc_add_arc_return;;
+        *);;
+
+        //Arc is being removed if its weight is greater than input weight
+        ->..remove_arc(*
+            <-call;;
+            -> rrel_1: rrel_fixed: rrel_scp_const: proc_erase_weight;;
+	        -> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+		        -> rrel_1: rrel_fixed: rrel_scp_var: source;;
+		        -> rrel_2: rrel_fixed: rrel_scp_var: target;;
+			    -> rrel_3: rrel_assign: rrel_scp_var: mmm;;
+		    *);;
+		    -> rrel_3: rrel_assign: rrel_scp_var: _descr25;;
+		    => nrel_goto: ..wait_after_remove_arc;;
+        *);;
+
+        ->..wait_after_remove_arc(*
+            <-waitReturn;;
+            -> rrel_1: rrel_fixed: rrel_scp_var: _descr25;;
+            => nrel_goto: ..gen_weight_arc;;
+        *);;
+
+        //Generating new arc between source and target
+        ->..gen_weight_arc(*
+            <-genElStr3;;
+            -> rrel_1: rrel_fixed: rrel_scp_var: source;;
+			-> rrel_2: rrel_assign:  rrel_scp_var: arc_to_add;;
+			-> rrel_3: rrel_fixed: rrel_scp_var: target;;
+            =>nrel_goto:..assign_value;;
+        *);;
+
+        ->..assign_value(*
+            <-varAssign;;
+            -> rrel_1: rrel_assign: rrel_scp_var: weight_value;;
+            -> rrel_2: rrel_fixed: rrel_scp_var: weight;;
+            => nrel_goto: ..gen_weight_arc_to_value;;
+        *);;
+
+        ->..gen_weight_arc_to_value(*
+            <-genElStr3;;
+            -> rrel_1: rrel_assign: rrel_scp_var: weight_node;;
+			-> rrel_2: rrel_assign:  rrel_scp_var: arc_to_weight;;
+			-> rrel_3: rrel_fixed: rrel_scp_var: arc_to_add;;
+            =>nrel_goto:..gen_system_idtf;;
+        *);;
+
+        // Generating weight itself
+        -> ..gen_system_idtf(*
+			<- genElStr5;;
+			-> rrel_1: rrel_fixed: rrel_scp_var: weight_node;;
+			-> rrel_2: rrel_assign: rrel_const: rrel_common: rrel_scp_var: _arc1;;
+			-> rrel_3: rrel_fixed: rrel_scp_var:weight_value;;
+			-> rrel_4: rrel_assign: rrel_pos: rrel_scp_var: _arc2;;
+			-> rrel_5: rrel_fixed: rrel_scp_const: nrel_system_identifier;;
+			=>nrel_goto:..proc_add_arc_return;;
+		*);;
+
+		-> ..proc_add_arc_return (*
+			<-return;;
+		*);;
+
+
+	*);;
+*);;

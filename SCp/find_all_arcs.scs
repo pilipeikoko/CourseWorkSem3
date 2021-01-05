@@ -1,0 +1,477 @@
+scp_program -> find_all_arcs (*
+	
+	-> rrel_params: ... (*
+		-> rrel_1: rrel_in: _graph;;
+	*);;
+
+	-> rrel_operators: ... (*
+
+
+	// Generating weight counter.
+	// We need it to generate new arcs.
+	->rrel_init: ..gen_weight_counter(*
+		<- contAdd;;
+		-> rrel_1: rrel_assign: rrel_scp_var: total_weight;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: [0];;
+		-> rrel_3: rrel_fixed: rrel_scp_const: [0];;
+		=> nrel_goto: ..set_all_iccidental_vertexes;;
+	*);;
+
+	//Creating set of incidental vertexes to each vertex of graph
+    ->..set_all_iccidental_vertexes(*
+        <- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: find_all_iccidental_vertexes;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: _graph;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _setting_icc;;
+		=> nrel_goto: ..wait_after_find_all_iccidental_vertexes;;
+    *);;
+
+	//Always comes after ..set_all_iccidental_vertexes
+    ->..wait_after_find_all_iccidental_vertexes(*
+        <-waitReturn;;
+        -> rrel_1: rrel_fixed: rrel_scp_var: _setting_icc;;
+        => nrel_goto: ..create_set_of_visited_vertexes;;
+    *);;
+
+	//We need this set to not enter the cycle 
+    ->..create_set_of_visited_vertexes (*
+        <- genEl;;
+        -> rrel_1: rrel_assign: rrel_scp_var: rrel_node: visited_vertexes;;
+        => nrel_goto: ..get_all_begin_vertexes;;
+    *);;
+
+	//Getting all vertexes of graph to deep search from each of them
+	-> ..get_all_begin_vertexes (*
+		 <- searchSetStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _graph;;
+		-> rrel_2: rrel_assign: rrel_pos_const_perm: rrel_scp_var: _arc1;;
+		-> rrel_3: rrel_assign: rrel_scp_var: _vertex_of_graph;;
+		-> rrel_4: rrel_assign: rrel_pos_const_perm: rrel_scp_var: _arc2;;
+		-> rrel_5: rrel_fixed: rrel_scp_const: rrel_vertex;;
+		->rrel_set_3: rrel_assign: rrel_scp_var: _all_begin_vertices;;
+		=> nrel_then: ..print_starting_deep_search;;		
+		=> nrel_else: ..return;;	
+	*);;
+
+	//Console output
+	->..print_starting_deep_search(*
+		<- printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [Starting deep search];; 		
+		=> nrel_goto: ..get_begin_vertex_here;;	
+	*);;
+
+	// Getting vertex to deep search from
+	-> ..get_begin_vertex_here (*
+		<- searchElStr3;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _all_begin_vertices;;
+		-> rrel_2: rrel_assign: rrel_scp_var: _deleted_arc;;
+		-> rrel_3: rrel_assign: rrel_scp_var: root;;
+		=> nrel_then: ..set_root_vertex;;
+		=> nrel_else: ..return;;
+	*);;
+
+	// Creating root so we could create arcs from it
+	->..set_root_vertex(*
+		<-varAssign;;
+		-> rrel_1: rrel_assign: rrel_scp_var: root_vertex;;
+		-> rrel_2: rrel_fixed: rrel_scp_var: root;;
+		=> nrel_goto: ..reset_weight_counter;;
+	*);;
+
+	// We have to reset counter every new root vertex 
+	->..reset_weight_counter(*
+		<-varAssign;;
+		-> rrel_1: rrel_assign: rrel_scp_var: total_weight;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: [0];;
+		=> nrel_goto: ..print_element;;
+	*);;
+
+
+	->..print_element(*
+		<- print;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [Deep search from vertex ];; 		
+		=> nrel_goto: ..print_my_elem;;	
+	*);;
+
+	->..print_my_elem(*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_print_idtf;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _print_idtf;;
+		=> nrel_goto: ..wait_return_after_print_my_elem;;
+	*);;
+	
+	// Always comes after print_my_elem
+	->..wait_return_after_print_my_elem(*
+		<-waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _print_idtf;;
+		=> nrel_goto: ..add_first_to_visited;;
+	*);;
+
+	
+    ->..add_first_to_visited(*
+      <- genElStr3;;
+        -> rrel_1: rrel_fixed: rrel_scp_var: visited_vertexes;;
+        -> rrel_2: rrel_assign: rrel_pos_const_perm: rrel_scp_var: _arc1;;
+        -> rrel_3: rrel_fixed: rrel_scp_var: root;;
+        => nrel_goto: ..find_set_of_targets_at_cycle;;
+    *);;
+
+
+    ->..find_set_of_targets_at_cycle(*
+        <- searchElStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: arc_from_begin_vertex_to_set_of_vertexes;;
+		-> rrel_3: rrel_assign: rrel_scp_var: set_of_vertex;;
+		-> rrel_4: rrel_assign: rrel_scp_var: _arc10;;
+		-> rrel_5: rrel_fixed: rrel_scp_const: rrel_iccidental_vertexes;;
+		=>nrel_then: ..get_target;;
+		=>nrel_else: ..find_father_at_third_part;;
+    *);;
+
+
+
+    ->..get_target(*
+        <- searchElStr3;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: set_of_vertex;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: arc_from_set_of_vertexes_to_target;;
+		-> rrel_3: rrel_assign: rrel_scp_var: target;;
+		=>nrel_then:..check_if_target_is_visited;;
+		=>nrel_else:..find_father_at_third_part;;
+    *);;
+
+	//If target is visited, we have to pick another one. If we have not more targets, we have to return to father
+	->..check_if_target_is_visited(*
+		<- searchElStr3;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: visited_vertexes;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: arc_from_visited;;
+		-> rrel_3: rrel_fixed: rrel_scp_var: target;;
+		=>nrel_then:..erase_and_return_to_get_target;;
+		=>nrel_else:..get_arc_weight_here;; 
+	*);;
+
+	->..erase_and_return_to_get_target(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: arc_from_set_of_vertexes_to_target;;
+		=> nrel_goto: ..get_target;;
+	*);;
+	
+
+	->..get_arc_weight_here(*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_find_weight_of_graph;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+			-> rrel_2: rrel_fixed: rrel_scp_var: target;;
+			-> rrel_3: rrel_assign: rrel_scp_var: weight_here;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _getting_temp_weight;;
+		=> nrel_goto: ..wait_return_get_arc_weight_here;;
+	*);;
+
+		
+	->..wait_return_get_arc_weight_here(*
+		<-waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _getting_temp_weight;;
+		=> nrel_goto: ..adding_to_current_weight;;
+	*);;
+
+	->..adding_to_current_weight(*
+		<-contAdd;;
+		-> rrel_1: rrel_assign: rrel_scp_var: temp_weight;;
+		-> rrel_2: rrel_fixed: rrel_scp_var: total_weight;;
+		-> rrel_3: rrel_fixed: rrel_scp_var: weight_here;;
+		=>nrel_goto:..assign_total_weight_after_add;;
+	*);;
+
+
+	->..assign_total_weight_after_add(*
+		<-varAssign;;
+		-> rrel_1: rrel_assign: rrel_scp_var: total_weight;;
+		-> rrel_2: rrel_fixed: rrel_scp_var: temp_weight;;
+		=>nrel_goto:..add_arc;;
+	*);;
+
+
+	// Arc might be added or replaced here.
+	// If there was no arc between root_vertex and target, we creating it with total_weight
+	->..add_arc(*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_add_or_replace_arc;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: root_vertex;;
+			-> rrel_2: rrel_fixed: rrel_scp_var: target;;
+			-> rrel_3: rrel_fixed: rrel_scp_var: total_weight;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _descr23;;
+		=> nrel_goto: ..wait_after_add_arc_here;;
+	*);;
+
+	->..wait_after_add_arc_here(*
+		<-waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _descr23;;
+		=> nrel_goto: ..set_father;;
+	*);;
+
+	// Setting father to element so we could return 
+    ->..set_father(*
+        	<- genElStr5;;
+			-> rrel_1: rrel_fixed: rrel_scp_var: target;;
+			-> rrel_2: rrel_assign:  rrel_scp_var: _arc3;;
+			-> rrel_3: rrel_fixed:rrel_pos_const_perm: rrel_scp_var: root;;
+			-> rrel_4: rrel_assign: rrel_scp_var: rrel_pos_const_perm: father_arc;;
+			-> rrel_5: rrel_fixed: rrel_pos_const_perm: rrel_scp_const: rrel_father;;
+			=> nrel_goto: ..put_into_visited;;
+    *);;
+
+	->..put_into_visited(*
+		 <- genElStr3;;
+        -> rrel_1: rrel_fixed: rrel_scp_var: visited_vertexes;;
+        -> rrel_2: rrel_assign: rrel_pos_const_perm: rrel_scp_var: arc_from_visited_vertexes_to_target;;
+        -> rrel_3: rrel_fixed: rrel_scp_var: target;;
+        => nrel_goto: ..remove_from_set_of_iccidental;;
+	*);;
+
+	->..remove_from_set_of_iccidental(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: arc_from_set_of_vertexes_to_target;;
+		=> nrel_goto: ..assign_root;;	
+	*);;
+
+	->..assign_root (*
+		<- varAssign;;
+		-> rrel_1: rrel_assign: rrel_scp_var: root;;
+		-> rrel_2: rrel_fixed: rrel_scp_var: target;;
+		=> nrel_goto: ..find_set_of_targets_at_cycle;;
+	*);;
+
+
+	//////get father
+	->..find_father_at_third_part(*
+		<- searchElStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: arc_from_begin_vertex_to_set_of_vertexes_tut;;
+		-> rrel_3: rrel_assign: rrel_scp_var: father_node_tut;;
+		-> rrel_4: rrel_assign: rrel_scp_var: _arc10_tut;;
+		-> rrel_5: rrel_fixed: rrel_scp_const:rrel_pos_const_perm: rrel_father;;
+		=>nrel_then: ..get_arc_from_root_to_father_weight;;
+		=>nrel_else: ..enter_final_cycle;;
+	*);;
+
+	->..get_arc_from_root_to_father_weight(*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_find_weight_of_graph;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: father_node_tut;;
+			-> rrel_2: rrel_fixed: rrel_scp_var: root;;
+			-> rrel_3: rrel_assign: rrel_scp_var: weight_at_root_father;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _descr20;;
+		=> nrel_goto: ..wait_return_get_arc_from_root_to_father_weight;;
+	*);;
+
+	->..wait_return_get_arc_from_root_to_father_weight(*
+		<-waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _descr20;;
+		=> nrel_goto: ..remove_last_arc_from_current_weight;;
+	*);;
+
+	->..remove_last_arc_from_current_weight(*
+		<- contSub;;
+		-> rrel_1: rrel_assign: rrel_scp_var: temp_weight;;
+		-> rrel_2: rrel_fixed: rrel_scp_var: total_weight;;
+		-> rrel_3: rrel_fixed: rrel_scp_var: weight_at_root_father;;
+		=> nrel_goto: ..assign_after_subtraction;;
+	*);;
+
+	->..assign_after_subtraction(*
+		<-varAssign;;
+		-> rrel_1: rrel_assign: rrel_scp_var: total_weight;;
+		-> rrel_2: rrel_fixed: rrel_scp_var: temp_weight;;
+		=>nrel_goto:..find_root_in_visited;;
+	*);;
+
+	->..find_root_in_visited(*
+		<-searchElStr3;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: visited_vertexes;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: arc_to_remove;;
+		-> rrel_3: rrel_fixed: rrel_scp_var: root;;
+		=>nrel_then: ..remove_from_visited;;
+		=>nrel_else: ..return;;//znachit vse
+	*);;
+
+	->..remove_from_visited(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: arc_to_remove;;
+		=> nrel_goto: ..find_set_of_targets;;
+	*);;
+
+
+
+	->..find_set_of_targets(*
+        <- searchElStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: deleted_arc;;
+		-> rrel_3: rrel_assign: rrel_scp_var: set_of_vertex_here;;
+		-> rrel_4: rrel_assign: rrel_scp_var: rrel_pos_const_perm: _arc10_here;;
+		-> rrel_5: rrel_fixed: rrel_scp_const: rrel_iccidental_vertexes;;
+		=>nrel_goto: ..erase_my_set;;
+    *);;
+
+	->..erase_my_set(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_scp_var:rrel_erase: deleted_arc;;
+		=> nrel_goto: ..find_father;;
+	*);;
+
+
+	//3rd part of deep search starts here
+	//If you got here, it means current vertex has no iccidental not visited vertexes anymore
+	//So we have to return to father
+	->..find_father(*
+		<- searchElStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: arc_from_begin_vertex_to_set_of_vertexes_here;;
+		-> rrel_3: rrel_assign: rrel_scp_var: father_node;;
+		-> rrel_4: rrel_assign: rrel_scp_var: _arc10;;
+		-> rrel_5: rrel_fixed: rrel_scp_const: rrel_pos_const_perm: rrel_father;;
+		=>nrel_then:..erase_arc_here;;
+		=>nrel_else:..return;;
+	*);;
+
+	->..erase_arc_here(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: arc_from_begin_vertex_to_set_of_vertexes_here;;
+		=> nrel_goto: ..return_iccidental_vertexes;;
+	*);;
+
+	->..return_iccidental_vertexes(*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_search_all_output;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+			-> rrel_2: rrel_assign: rrel_scp_var: all_icc_vertexes;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _descr7;;
+		=> nrel_goto: ..wait_return_iccidental_vertexes;;
+	*);;
+
+	->..wait_return_iccidental_vertexes(*
+		<-waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _descr7;;
+		=> nrel_goto: ..gen_constr;;
+	*);;
+
+	->..gen_constr(*
+		<- genElStr5;;
+			-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+			-> rrel_2: rrel_assign:  rrel_scp_var: _arc3_here;;
+			-> rrel_3: rrel_fixed: rrel_scp_var: all_icc_vertexes;;
+			-> rrel_4: rrel_assign: rrel_scp_var: rrel_pos_const_perm: _arc4;;
+			-> rrel_5: rrel_fixed: rrel_scp_const: rrel_iccidental_vertexes;;
+			=> nrel_goto: ..assign_root_here;;
+	*);;
+
+	// Getting new root
+	->..assign_root_here (*
+		<- varAssign;;
+		-> rrel_1: rrel_assign: rrel_scp_var: root;;
+		-> rrel_2: rrel_fixed: rrel_scp_var: father_node;;
+		=> nrel_goto: ..find_set_of_targets_at_cycle;;
+	*);;
+
+	//If you got here, it means you visited all vertexes you could visit from root
+	//So you have to pick new root
+	->..enter_final_cycle(*
+		<- searchElStr3;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: visited_vertexes;;
+		-> rrel_2: rrel_assign: rrel_scp_var: _arc_to_remove;;
+		-> rrel_3: rrel_fixed: rrel_scp_var: root;;
+		=> nrel_goto: ..erase_arc;;
+	*);;
+
+	->..erase_arc(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: _arc_to_remove;;
+		=> nrel_goto: ..remove_from_all_verts;;
+	*);;
+
+	->..remove_from_all_verts(*
+		<- searchElStr3;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _all_begin_vertices;;
+		-> rrel_2: rrel_assign: rrel_scp_var: arc_to_delete;;
+		-> rrel_3: rrel_fixed: rrel_scp_var: root;;
+		=> nrel_goto: ..erase_arc_tut;;
+	*);;
+
+	->..erase_arc_tut(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase:rrel_scp_var:  arc_to_delete;;
+		=> nrel_goto: ..find_set_here;;
+	*);;
+
+
+	->..find_set_here(*
+		<- searchElStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: arc_from_begin_vertex_to_set_of_vertexes_here_tut;;
+		-> rrel_3: rrel_assign: rrel_scp_var: father_node_tut;;
+		-> rrel_4: rrel_assign: rrel_scp_var: _arc13;;
+		-> rrel_5: rrel_fixed: rrel_scp_const: rrel_pos_const_perm: rrel_iccidental_vertexes;;
+		=>nrel_then:..erase_arc_here_here;;
+		=>nrel_else:..return;;
+	*);;
+
+	->..erase_arc_here_here(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: arc_from_begin_vertex_to_set_of_vertexes_here_tut;;
+		=> nrel_goto: ..return_iccidental_vertexes_here;;
+	*);;
+
+
+
+
+	->..return_iccidental_vertexes_here(*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_search_all_output;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+			-> rrel_2: rrel_assign: rrel_scp_var: all_icc_vertexes_here;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _descr15;;
+		=>nrel_goto: ..wait_return_iccidental_vertexes_here;;
+	*);;
+
+	->..wait_return_iccidental_vertexes_here(*
+		<-waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _descr15;;
+		=> nrel_goto: ..gen_constr_here;;
+	*);;
+
+
+	->..gen_constr_here(*
+		<- genElStr5;;
+			-> rrel_1: rrel_fixed: rrel_scp_var: root;;
+			-> rrel_2: rrel_assign:  rrel_scp_var: _arc3_here;;
+			-> rrel_3: rrel_fixed: rrel_scp_var: all_icc_vertexes_here;;
+			-> rrel_4: rrel_assign: rrel_scp_var: rrel_pos_const_perm: _arc4;;
+			-> rrel_5: rrel_fixed: rrel_scp_const: rrel_iccidental_vertexes;;
+			=> nrel_goto: ..get_begin_vertex_here;;
+	*);;
+
+    ->..graph_is_empty(*
+        <- printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [Graph is empty];; 		
+		=> nrel_goto: ..return;;	
+    *);;
+	//Оператор return
+	-> ..return (*
+		<- return;;
+	*);;
+
+	*);;
+*);;	

@@ -1,0 +1,72 @@
+// Connects to all vertexes of graph its set if incidental vertexes with nrel_incidental_vertexes
+scp_program -> find_all_iccidental_vertexes (*
+	
+	-> rrel_params: ... (*
+		-> rrel_1: rrel_in: _graph;;
+	*);;
+
+	-> rrel_operators: ... (*
+
+	-> rrel_init: ..get_all_vertexes (*
+		 <- searchSetStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _graph;;
+		-> rrel_2: rrel_assign: rrel_pos_const_perm: rrel_scp_var: _arc1;;
+		-> rrel_3: rrel_assign: rrel_scp_var: _vertex_of_graph;;
+		-> rrel_4: rrel_assign: rrel_pos_const_perm: rrel_scp_var: _arc2;;
+		-> rrel_5: rrel_fixed: rrel_scp_const: rrel_vertex;;
+		->rrel_set_3: rrel_assign: rrel_scp_var: all_vertexes;;
+		=> nrel_then: ..get_begin_vertex;;		
+		=> nrel_else: ..return_find_iccidental_vertexes;;	
+	*);;
+
+	
+	-> ..get_begin_vertex (*
+		<- searchElStr3;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: all_vertexes;;
+		-> rrel_2: rrel_assign: rrel_scp_var: _deleted_arc;;
+		-> rrel_3: rrel_assign: rrel_scp_var: _begin_vertex;;
+		=> nrel_then: ..get_all_iccidental_vertexes_of_begin;;
+		=> nrel_else: ..return_find_iccidental_vertexes;;
+	*);;
+
+	->..get_all_iccidental_vertexes_of_begin(*
+		<-call;;
+		->rrel_1:rrel_fixed: rrel_scp_const:  proc_search_all_output;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: _begin_vertex;;
+			-> rrel_2: rrel_assign: rrel_scp_var: set_of_vertex;;
+		*);;
+		->rrel_3: rrel_assign: rrel_scp_var: _descr5;;
+		=> nrel_goto: ..wait_after_get_all_iccidental_vertexes_of_begin;;
+	*);;
+
+
+	-> ..wait_after_get_all_iccidental_vertexes_of_begin (*
+		<-waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _descr5;;
+		=> nrel_goto: ..gen_constr;;
+	*);;
+
+	// Connects _begin_vertex with set of its incidental vertexes as nrel_iccidental_vertexes
+	->..gen_constr(*
+		<- genElStr5;;
+			-> rrel_1: rrel_fixed: rrel_scp_var: _begin_vertex;;
+			-> rrel_2: rrel_assign:  rrel_scp_var: _arc3;;
+			-> rrel_3: rrel_fixed: rrel_scp_var: set_of_vertex;;
+			-> rrel_4: rrel_assign: rrel_scp_var: rrel_pos_const_perm: _arc4;;
+			-> rrel_5: rrel_fixed: rrel_scp_const: rrel_iccidental_vertexes;;
+			=> nrel_goto: ..remove_from_all_vertexes;;
+	*);;
+
+	// So we dont create second set
+	-> ..remove_from_all_vertexes (*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: _deleted_arc;;
+		=> nrel_goto: ..get_begin_vertex;;	
+	*);;
+
+	-> ..return_find_iccidental_vertexes (*
+		<-return;;
+	*);;
+	*);;
+*);;	

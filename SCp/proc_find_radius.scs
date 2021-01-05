@@ -1,0 +1,154 @@
+// This process generates all possible varianths of arcs, finds eccentricity of each vertex,
+// and chooses minimal of them. The value of chosen element is radius itself
+scp_program -> proc_find_radius (*
+	
+	-> rrel_params: ... (*
+
+		-> rrel_1: rrel_in: _graph;;
+
+		-> rrel_2: rrel_in: _test_number;;
+
+        ->rrel_3:rrel_out:radius;;
+
+	*);;
+
+	-> rrel_operators: ... (*
+
+    //Console printing
+	-> rrel_init: ..start (*
+		<- print;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [Test ];; 		
+		=> nrel_goto: ..gen_radius;;	
+	*);;
+
+    //Generater sc-variable radius
+     ->..gen_radius(*
+         <-varAssign;;
+         -> rrel_1: rrel_assign: rrel_scp_var: radius;;
+         -> rrel_2: rrel_fixed: rrel_scp_const: [-1];;
+         =>nrel_goto:..print_test_numbers;; 	
+     *);;
+
+	//Console printing
+	-> ..print_test_numbers (*
+		<- printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _test_number;; 		
+		=> nrel_goto: ..get_all_arcs;;	
+	*);;
+
+    //Generating all possible varianths of arcs in graph
+    ->..get_all_arcs(*
+        <-call;;
+        -> rrel_1: rrel_fixed: rrel_scp_const: find_all_arcs;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: _graph;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _searching_arcs;;
+		=> nrel_goto: ..wait_after_get_all_arcs;;
+    *);;
+
+    ->..wait_after_get_all_arcs(*
+        <-waitReturn;;
+        -> rrel_1: rrel_fixed: rrel_scp_var: _searching_arcs;;
+        => nrel_goto: ..print_searching_eccentricites;;
+    *);;
+
+	//Console printing
+    ->..print_searching_eccentricites(*
+        <- printNl;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: [Searching eccentricity];; 		
+		=> nrel_goto: ..get_all_vertexes;;	
+    *);;
+
+    ->..get_all_vertexes(*
+        <- searchSetStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _graph;;
+		-> rrel_2: rrel_assign: rrel_pos_const_perm: rrel_scp_var: _arc1;;
+		-> rrel_3: rrel_assign: rrel_scp_var: _vertex_of_graph;;
+		-> rrel_4: rrel_assign: rrel_pos_const_perm: rrel_scp_var: _arc2;;
+		-> rrel_5: rrel_fixed: rrel_scp_const: rrel_vertex;;
+		->rrel_set_3: rrel_assign: rrel_scp_var: all_vertexes;;
+		=> nrel_then: ..get_begin_vertex;;		
+		=> nrel_else: ..no_vertexes_case;;
+    *);;
+
+    ->..get_begin_vertex(*
+        <- searchElStr3;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: all_vertexes;;
+		-> rrel_2: rrel_assign: rrel_pos_const_perm: rrel_scp_var: arc_from_all_vertexes_to_current_vertex;;
+		-> rrel_3: rrel_assign: rrel_scp_var: current_vertex;;
+        =>nrel_then:..find_eccentricity;;
+        =>nrel_else:..return;;
+    *);;
+
+    // Searching eccentricity of current_vertex
+    ->..find_eccentricity(*
+        <-call;;
+        -> rrel_1: rrel_fixed: rrel_scp_const: proc_find_eccentricity;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: current_vertex;;
+            -> rrel_2: rrel_assign: rrel_scp_var: eccentricity;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _searching_eccentricity;;
+		=> nrel_goto: ..wait_after_find_eccentricity;;
+    *);;
+
+    ->..wait_after_find_eccentricity(*
+        <-waitReturn;;
+        -> rrel_1: rrel_fixed: rrel_scp_var: _searching_eccentricity;;
+        => nrel_goto: ..check_eccentricity;;
+    *);;
+
+    // If eccentricity equals 0, positive power of current_vertex is 0
+    ->..check_eccentricity(*
+        <- ifEq;;
+        -> rrel_1:rrel_fixed:rrel_scp_var: eccentricity;;
+        -> rrel_2:rrel_fixed:rrel_scp_const: [0];;
+        => nrel_then: ..erase_arc;;
+        => nrel_else: ..check_radius;;
+    *);;
+
+    // If radius equals -1, we haven't found eccentricity yet
+    ->..check_radius(*
+        <- ifEq;;
+        -> rrel_1:rrel_fixed:rrel_scp_var: radius;;
+        -> rrel_2:rrel_fixed:rrel_scp_const: [-1];;
+        => nrel_then: ..assign_radius;;
+        => nrel_else: ..check_if_greater;;       
+    *);;
+
+    ->..assign_radius(*
+        <-varAssign;;
+        -> rrel_1:rrel_assign:rrel_scp_var: radius;;
+        -> rrel_2:rrel_fixed:rrel_scp_var: eccentricity;;
+        => nrel_goto: ..erase_arc;;
+    *);;
+
+    ->..check_if_greater(*
+        <-ifGr;;
+        -> rrel_1:rrel_fixed:rrel_scp_var: radius;;
+        -> rrel_2:rrel_fixed:rrel_scp_var: eccentricity;;
+        => nrel_then: ..assign_radius;;
+        => nrel_else: ..erase_arc;;       
+    *);;
+
+    ->..erase_arc(*
+        <- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: arc_from_all_vertexes_to_current_vertex;;
+		=> nrel_goto: ..get_begin_vertex;;
+    *);;
+
+    // If graph has no vertexes, radius won't be found
+    // Process returns -1
+    ->..no_vertexes_case(*
+        <-printNl;;
+        -> rrel_1: rrel_fixed: rrel_scp_const: [Graph has no vertexes];;
+        =>nrel_goto:..return;;
+    *);;
+
+	-> ..return (*
+		<- return;;
+	*);;
+
+	*);;
+*);;	

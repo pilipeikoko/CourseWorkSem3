@@ -1,0 +1,89 @@
+
+// Returns eccentricity of vertex
+// if 0 returned, positive power of this vertex is 0
+scp_program -> proc_find_eccentricity (*
+	-> rrel_params: ... (*
+		-> rrel_1: rrel_in: _begin_vertex;;
+        -> rrel_2: rrel_out:eccentricity;;
+	*);;
+
+	-> rrel_operators: ... (*
+
+	// Creating sc-variable eccentricity and assigning its value 
+    ->rrel_init:..var_assign(*
+        <-varAssign;;
+        -> rrel_1: rrel_assign: rrel_scp_var: eccentricity;;
+        -> rrel_2: rrel_fixed: rrel_scp_const: [0];;
+        => nrel_goto: ..find_set;;
+    *);;
+
+	// Searching for its set of incidental vertexes
+    -> ..find_set (*
+		<- searchElStr5;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _begin_vertex;;
+		-> rrel_2: rrel_assign:  rrel_scp_var: _arc;;
+		-> rrel_3: rrel_assign: rrel_scp_var: set_of_vertex;;
+		-> rrel_4: rrel_assign: rrel_scp_var: rrel_pos_const_perm: _arc10;;
+		-> rrel_5: rrel_fixed: rrel_scp_const: rrel_iccidental_vertexes;;
+		=>nrel_then:..search_el_3;;
+		=>nrel_else:..proc_find_eccentricity_return;;
+	*);;
+
+	// Searching element that is incidental to _begin_vertex
+	->..search_el_3(*
+		<-searchElStr3;;
+		-> rrel_1:rrel_fixed: rrel_scp_var: set_of_vertex;;
+		-> rrel_2: rrel_assign: rrel_scp_var: arc;;
+		-> rrel_3: rrel_assign: rrel_scp_var: element;;
+		=>nrel_then:..get_arc_weight;;
+		=>nrel_else:..return;;
+	*);;
+
+	
+	->..get_arc_weight(*
+		<- call;;
+		-> rrel_1: rrel_fixed: rrel_scp_const: proc_find_weight_of_graph;;
+		-> rrel_2: rrel_fixed: rrel_scp_const: ... (*
+			-> rrel_1: rrel_fixed: rrel_scp_var: _begin_vertex;;
+			-> rrel_2: rrel_fixed: rrel_scp_var: element;;
+			-> rrel_3: rrel_assign: rrel_scp_var: weight;;
+		*);;
+		-> rrel_3: rrel_assign: rrel_scp_var: _getting_weight;;
+		=> nrel_goto: ..wait_return_get_arc_weight;;
+	*);;
+
+		
+	->..wait_return_get_arc_weight(*
+		<-waitReturn;;
+		-> rrel_1: rrel_fixed: rrel_scp_var: _getting_weight;;
+		=> nrel_goto: ..compare_eccentricity_and_weight;;
+	*);;
+
+	// Eccentricity is maximal distance to vertex in graph so if we find weight that is greater than current eccentricity, we assign eccentricity its value
+    ->..compare_eccentricity_and_weight(*
+        <-ifGr;;
+        -> rrel_1: rrel_scp_var: eccentricity;;
+        -> rrel_2: rrel_scp_var: weight;;
+        => nrel_then: ..erase_arc_here;;
+        => nrel_else: ..set_eccentricity;;
+    *);;
+
+    ->..set_eccentricity(*
+        <-varAssign;;
+        -> rrel_1: rrel_assign: rrel_scp_var: eccentricity;;
+        -> rrel_2: rrel_fixed: rrel_scp_var: weight;;
+        => nrel_goto: ..erase_arc_here;;
+    *);;
+
+	->..erase_arc_here(*
+		<- eraseEl;;
+		-> rrel_1: rrel_fixed: rrel_erase: rrel_scp_var: arc;;
+		=> nrel_goto: ..search_el_3;;	
+	*);;
+
+	-> ..return (*
+		<- return;;
+	*);;
+    
+	*);;
+*);;

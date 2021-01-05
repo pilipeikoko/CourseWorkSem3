@@ -1,0 +1,16 @@
+directed_graph->graph5(*
+	->rrel_vertex: A5;;
+	->rrel_vertex: B5;;
+	->rrel_vertex: C5;;
+	->rrel_vertex: D5;;
+	->rrel_vertex: E5;;
+	->rrel_edge: ( A5 => C5 )(*<= 6;;*);;
+	->rrel_edge: ( C5 => A5 )(*<= 7;;*);;
+	->rrel_edge: ( A5 => D5 )(*<= 122;;*);;
+	->rrel_edge: ( A5 => E5 )(*<= 25;;*);;
+	->rrel_edge: ( B5 => E5 )(*<= 37;;*);;
+	->rrel_edge: ( D5 => B5 )(*<= 29;;*);;
+	->rrel_edge: ( E5 => C5 )(*<= 11;;*);;
+	->rrel_edge: ( C5 => B5 )(*<= 23;;*);;
+	->rrel_edge: ( B5 => A5 )(*<= 34;;*);;
+*);;

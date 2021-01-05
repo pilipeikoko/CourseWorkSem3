@@ -1,0 +1,34 @@
+directed_graph->graph7(*
+	->rrel_vertex: A7;;
+	->rrel_vertex: B7;;
+	->rrel_vertex: C7;;
+	->rrel_vertex: D7;;
+	->rrel_vertex: E7;;
+	->rrel_vertex: F7;;
+	->rrel_vertex: G7;;
+	->rrel_vertex: H7;;
+	->rrel_vertex: I7;;
+	->rrel_vertex: J7;;
+    ->rrel_vertex: K7;;
+    ->rrel_vertex: L7;;
+    ->rrel_vertex: M7;;
+    ->rrel_vertex: N7;;
+    ->rrel_vertex: O7;;
+	->rrel_edge: ( A7 => C7 )(*<= 11;;*);;
+	->rrel_edge: ( B7 => A7 )(*<= 6;;*);;
+	->rrel_edge: ( B7 => J7 )(*<= 13;;*);;
+	->rrel_edge: ( C7 => J7 )(*<= 7;;*);;
+	->rrel_edge: ( C7 => I7 )(*<= 3;;*);;
+	->rrel_edge: ( D7 => B7 )(*<= 10;;*);;
+	->rrel_edge: ( D7 => F7 )(*<= 11;;*);;
+    ->rrel_edge: ( F7 => J7 )(*<= 10;;*);;
+	->rrel_edge: ( G7 => E7 )(*<= 7;;*);;
+	->rrel_edge: ( G7 => C7 )(*<= 10;;*);;
+	->rrel_edge: ( G7 => I7 )(*<= 15;;*);;
+	->rrel_edge: ( H7 => D7 )(*<= 5;;*);;
+	->rrel_edge: ( H7 => F7 )(*<= 13;;*);;
+	->rrel_edge: ( J7 => I7 )(*<= 6;;*);;
+    ->rrel_edge: ( J7 => A7 )(*<= 13;;*);;
+    ->rrel_edge: ( D7 => G7 )(*<= 2;;*);;
+	//radius 18
+*);;
