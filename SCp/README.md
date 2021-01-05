@@ -9,7 +9,7 @@
 
 Сам пример нужно скачать в папку kb, до этого удалив из этой папки ui_menu:
 
-<git clone https://github.com/pilipeikoko/SCp_radius.git>
+<b>git clone https://github.com/pilipeikoko/SCp_radius.git</b>
 
 Далее, в папке radius,  есть папка menu. Тем есть файл ui_menu_run_scp_program.scs, в котором первая исполняемая роль - scp процесс, запускаемый первым(тут это my_proc).
 
